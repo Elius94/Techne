@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Techne TAG Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e3c72;
+            letter-spacing: -1px;
+        }
+
+        .logo-subtext {
+            font-size: 12px;
+            color: #666;
+            margin-top: -2px;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            position: relative;
+            margin-right: 10px;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #1e3c72;
+            border-radius: 50%;
+            top: 26px;
+            left: 26px;
+        }
+
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 20px;
+            background: #1e3c72;
+            top: 20px;
+            left: 28.5px;
+        }
+
+        .logo-rays {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+        }
+
+        .logo-rays::before,
+        .logo-rays::after {
+            content: '';
+            position: absolute;
+            width: 3px;
+            height: 15px;
+            background: #1e3c72;
+            left: 28.5px;
+        }
+
+        .logo-rays::before {
+            top: 5px;
+            transform: rotate(45deg);
+        }
+
+        .logo-rays::after {
+            bottom: 5px;
+            transform: rotate(-45deg);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 25px;
+        }
+
+        .device-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .page-selector {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .page-btn {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .page-btn.active {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-color: #1e3c72;
+        }
+
+        .main-areas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .area-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 3px solid transparent;
+        }
+
+        .area-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border-color: #1e3c72;
+        }
+
+        .area-card.active {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+
+        .area-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #e8f2ff;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+        }
+
+        .area-card.active .area-icon {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .search-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-field {
+            position: relative;
+        }
+
+        .search-field label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .search-field input, .search-field select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-field input:focus, .search-field select:focus {
+            outline: none;
+            border-color: #1e3c72;
+        }
+
+        .search-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(30, 60, 114, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #555;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .results-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .tag-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .tag-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .tag-card:hover {
+            border-color: #1e3c72;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .tag-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .tag-code {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1e3c72;
+        }
+
+        .tag-status {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-config {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .tag-details {
+            space-y: 8px;
+        }
+
+        .tag-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .tag-detail strong {
+            color: #555;
+        }
+
+        .tag-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 12px;
+        }
+
+        /* Profile Page Styles */
+        .profile-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .profile-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 4px solid #1e3c72;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Settings Page Styles */
+        .settings-section {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .settings-group {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .settings-group:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 25px;
+            background: #ccc;
+            border-radius: 25px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: #1e3c72;
+        }
+
+        .toggle-switch::after {
+            content: '';
+            width: 21px;
+            height: 21px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active::after {
+            left: 27px;
+        }
+
+        /* Mobile Styles */
+        .mobile-view {
+            background: #f8f9fa !important;
+        }
+        
+        .mobile-view .container {
+            padding: 10px !important;
+            max-width: 100% !important;
+        }
+        
+        .mobile-view .header {
+            padding: 15px !important;
+            border-radius: 0 !important;
+            margin-bottom: 10px !important;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .mobile-view .logo {
+            justify-content: center;
+        }
+
+        .mobile-view .user-info {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .mobile-view .page-selector {
+            border-radius: 0 !important;
+            margin-bottom: 10px !important;
+            padding: 10px !important;
+        }
+
+        .mobile-view .page-btn {
+            flex: 1;
+            text-align: center;
+            min-width: 0;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+        
+        .mobile-view .main-areas {
+            grid-template-columns: 1fr !important;
+            gap: 15px !important;
+            margin-bottom: 15px !important;
+        }
+        
+        .mobile-view .area-card {
+            padding: 20px !important;
+            border-radius: 15px !important;
+        }
+        
+        .mobile-view .area-icon {
+            width: 60px !important;
+            height: 60px !important;
+            font-size: 25px !important;
+            margin-bottom: 15px !important;
+        }
+        
+        .mobile-view .search-grid {
+            grid-template-columns: 1fr !important;
+        }
+        
+        .mobile-view .tag-grid {
+            grid-template-columns: 1fr !important;
+        }
+
+        .mobile-view .profile-grid {
+            grid-template-columns: 1fr !important;
+        }
+
+        .mobile-view .stats-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+        }
+        
+        .mobile-view .search-section,
+        .mobile-view .results-section,
+        .mobile-view .profile-section,
+        .mobile-view .settings-section {
+            border-radius: 15px !important;
+            padding: 20px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .mobile-view .search-actions {
+            flex-direction: column;
+        }
+
+        .mobile-view .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .mobile-view .results-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .mobile-view .tag-actions {
+            justify-content: space-between;
+        }
+
+        .mobile-view .tag-actions .btn-small {
+            flex: 1;
+            justify-content: center;
+        }
+
+        .floating-add {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(30, 60, 114, 0.3);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .floating-add:hover {
+            transform: scale(1.1);
+        }
+
+        .mobile-view .floating-add {
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Stili per la vista tecnico */
+        .tecnico-view .backoffice-view {
+            display: none !important;
+        }
+
+        body.tecnico-view .page-selector {
+            display: none !important;
+        }
+
+        body.tecnico-view .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+
+        body.tecnico-view .logo-text,
+        body.tecnico-view .logo-subtext {
+            color: white;
+        }
+
+        body.tecnico-view .area-card {
+            background: white;
+        }
+
+        .tecnico-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tecnico-actions .btn {
+            flex: 1;
+            min-width: 0;
+            white-space: nowrap;
+            justify-content: center;
+        }
+
+        .photo-upload-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .photo-upload-btn:hover {
+            background: #218838;
+        }
+
+        .save-changes-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            width: 100%;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .save-changes-btn:hover {
+            background: #0056b3;
+        }
+
+        .photo-preview {
+            width: 60px;
+            height: 60px;
+            background: #e9ecef;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <button class="device-toggle" onclick="toggleView()">📱 Mobile View</button>
+    
+    <!-- Role Selector (solo per demo) -->
+    <div style="position: fixed; top: 10px; left: 10px; z-index: 1000;" class="role-selector">
+        <select onchange="changeRole(this.value)" style="padding: 5px; border-radius: 5px;">
+            <option value="backoffice">Backoffice View</option>
+            <option value="tecnico">Tecnico View</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <div class="logo-rays"></div>
+                </div>
+                <div class="logo-container">
+                    <div class="logo-text">techne</div>
+                    <div class="logo-subtext">facility management</div>
+                    <div class="logo-subtext">SAUTER Group</div>
+                </div>
+            </div>
+            <div class="user-info backoffice-view">
+                <span>👤 Mario Rossi - Backoffice</span>
+                <span style="position: relative;">
+                    🔔
+                    <span class="notification-badge">3</span>
+                </span>
+                <button class="btn btn-secondary btn-small">Logout</button>
+            </div>
+            <div class="user-info tecnico-view" style="display: none;">
+                <span>👤 Giuseppe Verdi - Tecnico</span>
+                <span style="position: relative;">
+                    🔔
+                    <span class="notification-badge">1</span>
+                </span>
+                <button class="btn btn-secondary btn-small">Logout</button>
+            </div>
+        </div>
+
+        <!-- Page Selector -->
+        <div class="page-selector">
+            <button class="page-btn active" onclick="showPage('search')">🔍 Ricerca TAG</button>
+            <button class="page-btn" onclick="showPage('profile')">👤 Profilo</button>
+            <button class="page-btn" onclick="showPage('settings')">⚙️ Impostazioni</button>
+        </div>
+
+        <!-- Search Page -->
+        <div id="search-page">
+            <!-- Main Areas Selection -->
+            <div class="main-areas">
+                <div class="area-card active" onclick="selectArea('in-uso')">
+                    <div class="area-icon">🏷️</div>
+                    <h2>TAG IN USO</h2>
+                    <p style="margin-top: 10px; color: rgba(255,255,255,0.8);">Gestione TAG attualmente utilizzati</p>
+                    <div style="margin-top: 15px; font-size: 24px; font-weight: bold;">8,547</div>
+                </div>
+                <div class="area-card" onclick="selectArea('da-configurare')">
+                    <div class="area-icon">⚙️</div>
+                    <h2>TAG DA CONFIGURARE</h2>
+                    <p style="margin-top: 10px; color: #666;">TAG in attesa di configurazione</p>
+                    <div style="margin-top: 15px; font-size: 24px; font-weight: bold; color: #1e3c72;">1,453</div>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-section">
+                <h3 style="margin-bottom: 20px; color: #1e3c72;">🔍 Ricerca TAG</h3>
+                <div class="search-grid">
+                    <div class="search-field">
+                        <label>Codice Commessa</label>
+                        <input type="text" placeholder="Es. COM-2025-001">
+                    </div>
+                    <div class="search-field">
+                        <label>Cliente</label>
+                        <select>
+                            <option>Tutti i clienti</option>
+                            <option>HERA SpA</option>
+                            <option>Gruppo SAUTER</option>
+                            <option>Azienda Ospedaliera</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>Codice TAG</label>
+                        <input type="text" placeholder="Es. TAG-001">
+                    </div>
+                    <div class="search-field">
+                        <label>Tipo</label>
+                        <select>
+                            <option>Tutti i tipi</option>
+                            <option>Sensore Temperatura</option>
+                            <option>Valvola</option>
+                            <option>Pompa</option>
+                            <option>Ventilatore</option>
+                        </select>
+                    </div>
+                    <div class="search-field">
+                        <label>Ubicazione</label>
+                        <input type="text" placeholder="Es. Piano 1 - Zona A">
+                    </div>
+                    <div class="search-field">
+                        <label>Backoffice</label>
+                        <select>
+                            <option>Tutti</option>
+                            <option>Mario Rossi</option>
+                            <option>Luigi Bianchi</option>
+                            <option>Anna Verdi</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="search-actions">
+                    <button class="btn btn-primary">🔍 Cerca</button>
+                    <button class="btn btn-secondary">🔄 Reset Filtri</button>
+                    <button class="btn btn-secondary">📊 Esporta Excel</button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section">
+                <div class="results-header">
+                    <div>
+                        <h3 style="color: #1e3c72;">Risultati Ricerca - TAG IN USO</h3>
+                        <p style="color: #666; margin-top: 5px;">Trovati 245 TAG corrispondenti</p>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <label style="font-size: 14px;">Ordina per:</label>
+                        <select style="padding: 8px; border-radius: 5px; border: 1px solid #ddd;">
+                            <option>Codice TAG</option>
+                            <option>Cliente</option>
+                            <option>Data Modifica</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tag-grid">
+                    <!-- TAG Card 1 -->
+                    <div class="tag-card">
+                        <div class="tag-header">
+                            <div class="tag-code">TAG-HER-001</div>
+                            <div class="tag-status status-active">IN USO</div>
+                        </div>
+                        <div class="tag-details">
+                            <div class="tag-detail">
+                                <strong>Cliente:</strong> <span>HERA SpA</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Commessa:</strong> <span>COM-2025-HER-12</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Tipo:</strong> <span>Sensore Temperatura</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Ubicazione:</strong> <span>Centrale Termica - Piano 2</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Backoffice:</strong> <span>Mario Rossi</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Foto:</strong> <div class="photo-preview">📷</div>
+                            </div>
+                        </div>
+                        <!-- Azioni Backoffice -->
+                        <div class="tag-actions backoffice-view">
+                            <button class="btn btn-primary btn-small">✏️ Modifica</button>
+                            <button class="btn btn-secondary btn-small">👁️ Dettagli</button>
+                            <button class="btn btn-secondary btn-small">🔄 Sposta</button>
+                        </div>
+                        <!-- Azioni Tecnico -->
+                        <div class="tag-actions tecnico-view" style="display: none;">
+                            <div class="tecnico-actions">
+                                <button class="photo-upload-btn" onclick="uploadFoto('001')">📸 Carica Foto</button>
+                                <button class="btn btn-secondary btn-small">📝 Modifica Dati</button>
+                            </div>
+                            <button class="save-changes-btn" onclick="salvaModificheTecnico('001')">💾 Salva e Invia per Approvazione</button>
+                        </div>
+                    </div>
+
+                    <!-- TAG Card 2 -->
+                    <div class="tag-card">
+                        <div class="tag-header">
+                            <div class="tag-code">TAG-SAU-045</div>
+                            <div class="tag-status status-active">IN USO</div>
+                        </div>
+                        <div class="tag-details">
+                            <div class="tag-detail">
+                                <strong>Cliente:</strong> <span>Gruppo SAUTER</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Commessa:</strong> <span>COM-2025-SAU-08</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Tipo:</strong> <span>Valvola Modulante</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Ubicazione:</strong> <span>Uffici - Piano 3 - Zona B</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Backoffice:</strong> <span>Luigi Bianchi</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Foto:</strong> <div class="photo-preview">📷</div>
+                            </div>
+                        </div>
+                        <div class="tag-actions">
+                            <button class="btn btn-primary btn-small">✏️ Modifica</button>
+                            <button class="btn btn-secondary btn-small">👁️ Dettagli</button>
+                            <button class="btn btn-secondary btn-small">🔄 Sposta</button>
+                        </div>
+                    </div>
+
+                    <!-- TAG Card 3 -->
+                    <div class="tag-card">
+                        <div class="tag-header">
+                            <div class="tag-code">TAG-OSP-078</div>
+                            <div class="tag-status status-active">IN USO</div>
+                        </div>
+                        <div class="tag-details">
+                            <div class="tag-detail">
+                                <strong>Cliente:</strong> <span>Azienda Ospedaliera</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Commessa:</strong> <span>COM-2025-OSP-15</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Tipo:</strong> <span>Pompa Circolazione</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Ubicazione:</strong> <span>Reparto Chirurgia - Sala 4</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Backoffice:</strong> <span>Anna Verdi</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Foto:</strong> <div class="photo-preview">📷</div>
+                            </div>
+                        </div>
+                        <div class="tag-actions">
+                            <button class="btn btn-primary btn-small">✏️ Modifica</button>
+                            <button class="btn btn-secondary btn-small">👁️ Dettagli</button>
+                            <button class="btn btn-secondary btn-small">🔄 Sposta</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 30px;">
+                    <button class="btn btn-secondary btn-small">← Precedente</button>
+                    <span style="padding: 0 15px; color: #666;">Pagina 1 di 25</span>
+                    <button class="btn btn-secondary btn-small">Successiva →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile-page" class="hidden">
+            <div class="profile-section">
+                <h3 style="margin-bottom: 20px; color: #1e3c72;">👤 Profilo Utente</h3>
+                <div class="profile-grid">
+                    <div class="profile-card">
+                        <h4 style="color: #1e3c72; margin-bottom: 15px;">Informazioni Personali</h4>
+                        <div class="tag-detail">
+                            <strong>Nome:</strong> <span>Mario Rossi</span>
+                        </div>
+                        <div class="tag-detail">
+                            <strong>Ruolo:</strong> <span>Backoffice</span>
+                        </div>
+                        <div class="tag-detail">
+                            <strong>E-mail:</strong> <span>mario.rossi@techne.it</span>
+                        </div>
+                        <div class="tag-detail">
+                            <strong>Telefono:</strong> <span>+39 051 123456</span>
+                        </div>
+                        <div class="tag-detail">
+                            <strong>Ultimo accesso:</strong> <span>24/07/2025 14:30</span>
+                        </div>
+                    </div>
+                    <div class="profile-card">
+                        <h4 style="color: #1e3c72; margin-bottom: 15px;">Permessi e Accessi</h4>
+                        <div class="tag-detail">
+                            <strong>Livello:</strong> <span>Backoffice</span>
+                        </div>
+                        <div class="tag-detail">
+                            <strong>TAG Assegnati:</strong> <span>2,847</span>
+                        </div>
+                        <div class="tag-detail">
+                            <strong>Clienti Gestiti:</strong> <span>15</span>
+                        </div>
+                        <div class="tag-detail">
+                            <strong>Accesso Mobile:</strong> <span>✅ Abilitato</span>
+                        </div>
+                        <div class="tag-detail">
+                            <strong>Notifiche Email:</strong> <span>✅ Attive</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h3 style="margin-bottom: 20px; color: #1e3c72;">📊 Statistiche Personali</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">2,847</div>
+                        <div>TAG Gestiti</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">156</div>
+                        <div>Modifiche Questo Mese</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">23</div>
+                        <div>TAG in Validazione</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">98%</div>
+                        <div>Tasso di Approvazione</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-section">
+                <h3 style="margin-bottom: 20px; color: #1e3c72;">📈 Attività Recenti</h3>
+                <div style="space-y: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px;">
+                        <div>
+                            <strong>TAG-HER-045</strong> - Modificato
+                            <div style="font-size: 12px; color: #666;">Aggiornata ubicazione</div>
+                        </div>
+                        <div style="font-size: 12px; color: #666;">24/07/2025 13:45</div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px;">
+                        <div>
+                            <strong>TAG-SAU-089</strong> - Approvato
+                            <div style="font-size: 12px; color: #666;">Validazione completata</div>
+                        </div>
+                        <div style="font-size: 12px; color: #666;">24/07/2025 11:20</div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background: #f8f9fa; border-radius: 10px; margin-bottom: 10px;">
+                        <div>
+                            <strong>TAG-OSP-134</strong> - Trasferito
+                            <div style="font-size: 12px; color: #666;">Da "Da Configurare" a "In Uso"</div>
+                        </div>
+                        <div style="font-size: 12px; color: #666;">24/07/2025 09:15</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settings-page" class="hidden">
+            <div class="settings-section">
+                <h3 style="margin-bottom: 20px; color: #1e3c72;">⚙️ Impostazioni Generali</h3>
+                
+                <div class="settings-group">
+                    <h4 style="color: #1e3c72; margin-bottom: 15px;">Notifiche</h4>
+                    <div class="settings-item">
+                        <div>
+                            <strong>Notifiche Email</strong>
+                            <div style="font-size: 12px; color: #666;">Ricevi email per nuovi TAG e modifiche</div>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                    </div>
+                    <div class="settings-item">
+                        <div>
+                            <strong>Notifiche Push</strong>
+                            <div style="font-size: 12px; color: #666;">Notifiche immediate su dispositivo mobile</div>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                    </div>
+                    <div class="settings-item">
+                        <div>
+                            <strong>Riepilogo Giornaliero</strong>
+                            <div style="font-size: 12px; color: #666;">Email di riepilogo attività giornaliere</div>
+                        </div>
+                        <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h4 style="color: #1e3c72; margin-bottom: 15px;">Visualizzazione</h4>
+                    <div class="settings-item">
+                        <div>
+                            <strong>Tema Scuro</strong>
+                            <div style="font-size: 12px; color: #666;">Attiva modalità scura per l'interfaccia</div>
+                        </div>
+                        <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                    </div>
+                    <div class="settings-item">
+                        <div>
+                            <strong>Mostra Solo Miei TAG</strong>
+                            <div style="font-size: 12px; color: #666;">Filtro automatico per TAG assegnati</div>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                    </div>
+                    <div class="settings-item">
+                        <div>
+                            <strong>Anteprima Foto</strong>
+                            <div style="font-size: 12px; color: #666;">Mostra anteprima foto nelle card TAG</div>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h4 style="color: #1e3c72; margin-bottom: 15px;">Sicurezza</h4>
+                    <div class="settings-item">
+                        <div>
+                            <strong>Autenticazione a Due Fattori</strong>
+                            <div style="font-size: 12px; color: #666;">Sicurezza aggiuntiva per l'accesso</div>
+                        </div>
+                        <div class="toggle-switch" onclick="toggleSwitch(this)"></div>
+                    </div>
+                    <div class="settings-item">
+                        <div>
+                            <strong>Logout Automatico</strong>
+                            <div style="font-size: 12px; color: #666;">Disconnessione dopo 8 ore di inattività</div>
+                        </div>
+                        <div class="toggle-switch active" onclick="toggleSwitch(this)"></div>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h4 style="color: #1e3c72; margin-bottom: 15px;">Gestione Dati</h4>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <button class="btn btn-primary">📊 Esporta Tutti i Dati</button>
+                        <button class="btn btn-secondary">📁 Backup Manuale</button>
+                        <button class="btn btn-secondary">🔄 Sincronizza Ora</button>
+                    </div>
+                </div>
+
+                <div class="settings-group">
+                    <h4 style="color: #1e3c72; margin-bottom: 15px;">Informazioni Sistema</h4>
+                    <div class="profile-grid">
+                        <div class="profile-card">
+                            <div class="tag-detail">
+                                <strong>Versione App:</strong> <span>v2.1.4</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Ultimo Aggiornamento:</strong> <span>15/07/2025</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Database:</strong> <span>Sincronizzato</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Spazio Utilizzato:</strong> <span>2.4 GB / 10 GB</span>
+                            </div>
+                        </div>
+                        <div class="profile-card">
+                            <div class="tag-detail">
+                                <strong>Server Status:</strong> <span style="color: #28a745;">🟢 Online</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Latenza:</strong> <span>45ms</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Ultima Sincronizzazione:</strong> <span>24/07/2025 14:35</span>
+                            </div>
+                            <div class="tag-detail">
+                                <strong>Backup Automatico:</strong> <span style="color: #28a745;">✅ Attivo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Add Button -->
+    <button class="floating-add" title="Aggiungi nuovo TAG">+</button>
+
+    <script>
+        function changeRole(role) {
+            localStorage.setItem('userRole', role);
+            if (role === 'tecnico') {
+                document.body.classList.add('tecnico-view');
+                document.body.classList.add('mobile-view');
+                document.querySelector('.device-toggle').style.display = 'none';
+                checkAccess();
+            } else {
+                document.body.classList.remove('tecnico-view');
+                document.querySelector('.device-toggle').style.display = 'block';
+            }
+            updateUI();
+        }
+
+        function updateUI() {
+            const isTecnico = document.body.classList.contains('tecnico-view');
+            document.querySelector('.backoffice-view').style.display = isTecnico ? 'none' : 'flex';
+            document.querySelector('.tecnico-view').style.display = isTecnico ? 'flex' : 'none';
+        }
+
+        function toggleView() {
+            if (localStorage.getItem('userRole') === 'tecnico') {
+                return; // Disabilita il toggle view per i tecnici
+            }
+            const body = document.body;
+            const button = document.querySelector('.device-toggle');
+            
+            if (body.classList.contains('mobile-view')) {
+                body.classList.remove('mobile-view');
+                button.textContent = '📱 Mobile View';
+            } else {
+                body.classList.add('mobile-view');
+                button.textContent = '🖥️ Desktop View';
+            }
+        }
+
+        function showPage(page) {
+            // Hide all pages
+            document.getElementById('search-page').classList.add('hidden');
+            document.getElementById('profile-page').classList.add('hidden');
+            document.getElementById('settings-page').classList.add('hidden');
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.page-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected page and activate button
+            document.getElementById(page + '-page').classList.remove('hidden');
+            event.target.classList.add('active');
+        }
+
+        function selectArea(area) {
+            const cards = document.querySelectorAll('.area-card');
+            cards.forEach(card => card.classList.remove('active'));
+            
+            if (area === 'in-uso') {
+                cards[0].classList.add('active');
+                document.querySelector('.results-section h3').textContent = 'Risultati Ricerca - TAG IN USO';
+                document.querySelector('.results-section p').textContent = 'Trovati 245 TAG corrispondenti';
+                
+                // Reset status to IN USO
+                const statusElements = document.querySelectorAll('.tag-status');
+                statusElements.forEach(status => {
+                    status.textContent = 'IN USO';
+                    status.className = 'tag-status status-active';
+                });
+            } else {
+                cards[1].classList.add('active');
+                document.querySelector('.results-section h3').textContent = 'Risultati Ricerca - TAG DA CONFIGURARE';
+                document.querySelector('.results-section p').textContent = 'Trovati 127 TAG da configurare';
+                
+                // Change status of TAG cards to "DA CONFIGURARE"
+                const statusElements = document.querySelectorAll('.tag-status');
+                statusElements.forEach(status => {
+                    status.textContent = 'DA CONFIGURARE';
+                    status.className = 'tag-status status-config';
+                });
+            }
+        }
+
+        function toggleSwitch(element) {
+            element.classList.toggle('active');
+        }
+
+        // Simulate real-time updates
+        setInterval(() => {
+            const badge = document.querySelector('.notification-badge');
+            const current = parseInt(badge.textContent);
+            if (Math.random() < 0.1) { // 10% chance every second
+                badge.textContent = current + 1;
+            }
+        }, 1000);
+
+        // Auto-adjust mobile view on window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 768 && !document.body.classList.contains('mobile-view')) {
+                document.body.classList.add('mobile-view');
+                document.querySelector('.device-toggle').textContent = '🖥️ Desktop View';
+            }
+        });
+
+        // Check initial screen size
+        if (window.innerWidth <= 768) {
+            document.body.classList.add('mobile-view');
+            document.querySelector('.device-toggle').textContent = '🖥️ Desktop View';
+        }
+    </script>
+</body>
+</html>
